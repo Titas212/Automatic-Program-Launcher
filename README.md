@@ -1,4 +1,8 @@
-# MyProject
+# Automatic program launcher
+
+# Description
+
+* Šis projektas yra svriptas, kuris jūsų pasirinktu laiko momentu įjungs jums norimą programą.
 * Mano projektas bus scriptas.
     * Tam tikru laiko momentu,
     kompiuteryje įjungs pasirinktą programą.
