@@ -13,10 +13,10 @@
 
 # Program making stages
 
-*  1. Kodas, kuris paprasčiausiai įjungia įvestą programą.
-*  2. Kodas, kuris leidžia vartotojui įvesti norimos programos pavadinimą ir pagal šį pavadinimą kompiuteryje randama ir įjungiama programa.
-*  3. Kodas, leidžiantis pasirinktai programai įsijungti tam tikru laiko momentu.
-*  4. Kodas, leidžiantis vartotojui įvesti norimą programos įjungimo laiką.
-*  5. Kodas, sekantis laiką per kurį programa pilnai įsijungia.
+* 1.Kodas, kuris paprasčiausiai įjungia įvestą programą.
+* 2.Kodas, kuris leidžia vartotojui įvesti norimos programos pavadinimą ir pagal šį pavadinimą kompiuteryje randama ir įjungiama programa.
+* 3.Kodas, leidžiantis pasirinktai programai įsijungti tam tikru laiko momentu.
+* 4.Kodas, leidžiantis vartotojui įvesti norimą programos įjungimo laiką.
+* 5.Kodas, sekantis laiką per kurį programa pilnai įsijungia.
 
 
