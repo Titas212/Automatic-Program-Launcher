@@ -9,12 +9,35 @@ import argparse
     import schedule and time leižia programai nustatyti tam tikrą programos įjungimo laiką.
     import argparse surenka įvestus žodžius iš terminal ir įdeda juos į argumentus. """
 
+class PrintPath:
+    def __init__(self, pavadinimas):    
+        self.pavadinimas = pavadinimas
+    
+
+    def _find_file_path(self, root_folder, rex):
+        for subdir, dirs, files in os.walk(root_folder):
+            for file in files:
+                result = rex.search(file)
+                if result:
+                    return print('Jūsų programa yra: ' + os.path.join(subdir, file))
+    
+    
+    def find_file_path_in_all_drives(self, pavadinimas):
+        rex = re.compile(self.pavadinimas)
+        for drive in win32api.GetLogicalDriveStrings().split('\000')[:-1]:
+            self._find_file_path(drive, rex)
+    
+    
+    def print_path(self):
+        self.find_file_path_in_all_drives(self.pavadinimas)
+
 
 class FindingProgram:
     def __init__(self, scheduler, laikas, pavadinimas):
         self.scheduler = schedule
         self.laikas = laikas
         self.pavadinimas = pavadinimas
+        
 
     def _find_file(self, root_folder, rex):
         for subdir, dirs, files in os.walk(root_folder):
@@ -33,7 +56,6 @@ class FindingProgram:
 
 
     def run_program(self):
-        print('Jūsų programa: ' + self.pavadinimas + ' bus įjungta ' + self.laikas + '.')
         """Į terminalą išvedamas jūsų programos pavadinimas ir kada ji bus įjungta."""
 
         self.scheduler.every().days.at(self.laikas).do(self.find_file_in_all_drives, self.pavadinimas)
@@ -52,8 +74,9 @@ def main():
     pavadinimas = args.pavadinimas
     laikas = args.laikas
     finding_program_class = FindingProgram(scheduler = schedule, laikas = laikas, pavadinimas = pavadinimas)
+    printing_program_path = PrintPath(pavadinimas = pavadinimas)
     """Pavadinimo ir laiko argumentai patalpinami į kintamuosius."""
-    
+    printing_program_path.print_path()
     finding_program_class.run_program()
     
     while True:
