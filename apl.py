@@ -61,9 +61,23 @@ class FindingProgram:
     """Panaudojami import schedule ir import time ir nustatomas programos įsijungimo laikas, bei kokia programa bus įjungta."""
 
     
-    def ivest_duomenu_print(self):
+    def ivestu_duomenu_print(self):
         return print('Jūsų programa: ' + self.pavadinimas + ' bus įjungta ' + self.laikas + '.')
     """Į terminalą išvedamas jūsų programos pavadinimas ir kada ji bus įjungta."""
+
+
+def testing_print(pavadinimas1, laikas1):
+    if laikas1 == None:
+        return 'Jūsų programa: ' + pavadinimas1 + ' bus įjungta.'
+    elif pavadinimas1 == None:
+        return 'Įveskite programos pavadinimą.'
+    elif pavadinimas1 == '' and laikas1 == '':
+        return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
+    elif pavadinimas1 == int and laikas1 == int:
+        return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
+    else:
+        return 'Jūsų programa: ' + pavadinimas1 + ' bus įjungta ' + laikas1 + '.'
+
 
 
 def main():
@@ -84,7 +98,7 @@ def main():
     """Pavadinimo ir laiko argumentai patalpinami į kintamuosius."""
     printing_program_path.print_path()
     finding_program_class.run_program()
-    finding_program_class.ivest_duomenu_print()
+    finding_program_class.ivestu_duomenu_print()
     while True:
             schedule.run_pending()
             time.sleep(10)
