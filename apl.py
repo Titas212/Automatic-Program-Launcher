@@ -47,6 +47,8 @@ class FindingProgram:
                 result = rex.search(file)
                 if result:
                     os.startfile(os.path.join(subdir, file))
+                else:
+                    return print('Programa nerasta')
     """Ši funkcija ieško norimos programos įvairiuose failuose."""
 
 

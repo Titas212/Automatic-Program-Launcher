@@ -38,7 +38,7 @@ class TestCase(unittest.TestCase):
 
     def test_integer(self):
         pavadinimas1 = 55
-        laikas1 = 55
+        laikas1 = '21:30'
         result = testing_print(pavadinimas1, laikas1)
         expected_result = 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
         self.assertEqual(result, expected_result)
