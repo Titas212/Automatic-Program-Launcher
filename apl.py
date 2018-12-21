@@ -16,7 +16,7 @@ class PrintPath:
     
 
     def _find_file_path(self, root_folder, rex):
-        for subdir, dirs, files in os.walk(root_folder):
+        for subdir, _, files in os.walk(root_folder):
             for file in files:
                 result = rex.search(file)
                 if result:
@@ -30,8 +30,9 @@ class PrintPath:
     
     
     def print_path(self):
+        """Ši funkcija į terminalą išveda jūsų norimos programos path.""" 
         self.find_file_path_in_all_drives(self.pavadinimas)
-    """ Ši funkcija į terminalą išveda jūsų norimos programos path.""" 
+    
 
 
 class FindingProgram:
@@ -42,35 +43,37 @@ class FindingProgram:
         
 
     def _find_file(self, root_folder, rex):
-        for subdir, dirs, files in os.walk(root_folder):
+        """Ši funkcija ieško norimos programos įvairiuose failuose."""
+        for subdir, _, files in os.walk(root_folder):
             for file in files:
                 result = rex.search(file)
                 if result:
                     os.startfile(os.path.join(subdir, file))
-                else:
-                    return print('Programa nerasta')
-    """Ši funkcija ieško norimos programos įvairiuose failuose."""
+    
 
 
     def find_file_in_all_drives(self, pavadinimas):
+        """Ši funkcija leidžia funkcijai find_file veikti kompiuterio drivuose (Pvz. Ieško norimos programos C Drive)."""
         rex = re.compile(self.pavadinimas)
         for drive in win32api.GetLogicalDriveStrings().split('\000')[:-1]:
             self._find_file(drive, rex)
-    """Ši funkcija leidžia funkcijai find_file veikti kompiuterio drivuose (Pvz. Ieško norimos programos C Drive)."""
+   
 
 
     def run_program(self):
-
+        """Panaudojami import schedule ir import time ir nustatomas programos įsijungimo laikas, bei kokia programa bus įjungta."""
         self.scheduler.every().days.at(self.laikas).do(self.find_file_in_all_drives, self.pavadinimas)
-    """Panaudojami import schedule ir import time ir nustatomas programos įsijungimo laikas, bei kokia programa bus įjungta."""
+    
 
     
     def ivestu_duomenu_print(self):
+        """Į terminalą išvedamas jūsų programos pavadinimas ir kada ji bus įjungta."""
         return print('Jūsų programa: ' + self.pavadinimas + ' bus įjungta ' + self.laikas + '.')
-    """Į terminalą išvedamas jūsų programos pavadinimas ir kada ji bus įjungta."""
+    
 
 
 def testing_print(pavadinimas1, laikas1):
+    """ Ši funkcija yra skirta testavimui """
     pavadinimas1_type = type(pavadinimas1)
     if laikas1 == None:
         return 'Jūsų programa: ' + pavadinimas1 + ' bus įjungta.'
@@ -82,43 +85,66 @@ def testing_print(pavadinimas1, laikas1):
         return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
     else:
         return 'Jūsų programa: ' + pavadinimas1 + ' bus įjungta ' + laikas1 + '.'
-""" Ši funkcija yra skirta testavimui """ 
+ 
 
 
 
 def main():
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('pavadinimas', nargs='?', help = 'Irasykite programos pavadinima')
-    """Patalpina įrašytą pavadinimą į argument."""
-
-    parser.add_argument('laikas', nargs='?', help = 'Irasykite programos paleidimo laiką', type = str)
-    """Patalpina įrašytą laiką į argument."""
-
+    parser = create_parser()
     args = parser.parse_args()
     pavadinimas = args.pavadinimas
     laikas = args.laikas
-
-    pavadinimas_type = type(pavadinimas)
-    if laikas is None:
-        printing_program_path = PrintPath(pavadinimas = pavadinimas)
-        printing_program_path.print_path()
-    elif pavadinimas is None:
-        return 'Įveskite programos pavadinimą.'
-    elif pavadinimas == '' and laikas == '':
-        return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
-    elif pavadinimas_type == int:
-        return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
-    else:
-        finding_program_class = FindingProgram(scheduler = schedule, laikas = laikas, pavadinimas = pavadinimas)
-        """Pavadinimo ir laiko argumentai patalpinami į kintamuosius."""
-        finding_program_class.run_program()
-        finding_program_class.ivestu_duomenu_print()
+    """Pavadinimo ir laiko argumentai patalpinami į kintamuosius."""
+    tikrasis_laikas = laiko_patikrinimas(laikas)
+    tikrasis_pavadinimas = pavadinimo_patikrinimas(pavadinimas)
+    printing_program_path = PrintPath(pavadinimas = tikrasis_pavadinimas)
+    finding_program_class = FindingProgram(scheduler = schedule, laikas = tikrasis_laikas, pavadinimas = pavadinimas)
+    """Pavadinimo ir laiko argumentai patalpinami į kintamuosius."""
+    funkciju_atlikimas_su_tikrom_reiksmem(tikrasis_pavadinimas, tikrasis_laikas, printing_program_path, finding_program_class)
 
     while True:
-            schedule.run_pending()
-            time.sleep(10)
-    """Šis while ciklas verčia programos įjungimo funkciją laukti iki tam tikro laiko."""
+        """Šis while ciklas verčia programos įjungimo funkciją laukti iki tam tikro laiko."""
+        schedule.run_pending()
+        time.sleep(10)
+    
+
+def create_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('pavadinimas', nargs='?', help = 'Irasykite programos pavadinima')
+    """Patalpina įrašytą pavadinimą į argument."""
+    parser.add_argument('laikas', nargs='?', help = 'Irasykite programos paleidimo laiką', type = str)
+    """Patalpina įrašytą laiką į argument."""
+    return parser
+
+
+def laiko_patikrinimas(laikas):
+    if laikas is None:
+        laikas = '(Laikas neįvestas)'
+        return laikas
+    else:
+        return laikas
+def pavadinimo_patikrinimas(pavadinimas):
+    try:
+        int(pavadinimas)
+        pavadinimas = '(Pavadinimas negali būti sudarytas tik iš skaičių)'
+    except:
+        pass
+    if pavadinimas is None:
+        pavadinimas = '(Pavadinimas neįvestas)'
+        return pavadinimas
+    else:
+        return pavadinimas
+def funkciju_atlikimas_su_tikrom_reiksmem(tikrasis_pavadinimas, tikrasis_laikas, printing_program_path, finding_program_class):
+    if tikrasis_laikas == None:
+        printing_program_path.print_path
+    elif tikrasis_pavadinimas == None:
+        print(tikrasis_pavadinimas)
+    else:
+        printing_program_path.print_path
+        finding_program_class.ivestu_duomenu_print()
+        finding_program_class.run_program()
+    
 
 if __name__ == '__main__':
     main()
