@@ -10,11 +10,11 @@
 # Modules
 
 * import os
-  import win32api
-  import re
-  import schedule
-  import time
-  import argparse
+* import win32api
+* import re
+* import schedule
+* import time
+* import argparse
 
 # How to install it
 
