@@ -4,8 +4,9 @@ import re
 import schedule
 import time
 import argparse
+import this
 """ import os and import win32api leidžia programai komunikuoti su kompiuterio sistema (Pvz. Windows).
-    import re
+    import re sukompiliuoja įvestą programos pavadinimą.
     import schedule and time leižia programai nustatyti tam tikrą programos įjungimo laiką.
     import argparse surenka įvestus žodžius iš terminal ir įdeda juos į argumentus. """
 
@@ -30,6 +31,7 @@ class PrintPath:
     
     def print_path(self):
         self.find_file_path_in_all_drives(self.pavadinimas)
+    """ Ši funkcija į terminalą išveda jūsų norimos programos path.""" 
 
 
 class FindingProgram:
@@ -78,6 +80,7 @@ def testing_print(pavadinimas1, laikas1):
         return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
     else:
         return 'Jūsų programa: ' + pavadinimas1 + ' bus įjungta ' + laikas1 + '.'
+""" Ši funkcija yra skirta testavimui """ 
 
 
 
