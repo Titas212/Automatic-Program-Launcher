@@ -67,13 +67,14 @@ class FindingProgram:
 
 
 def testing_print(pavadinimas1, laikas1):
+    pavadinimas1_type = type(pavadinimas1)
     if laikas1 == None:
         return 'Jūsų programa: ' + pavadinimas1 + ' bus įjungta.'
     elif pavadinimas1 == None:
         return 'Įveskite programos pavadinimą.'
     elif pavadinimas1 == '' and laikas1 == '':
         return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
-    elif pavadinimas1 == int and laikas1 == int:
+    elif pavadinimas1_type == int:
         return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
     else:
         return 'Jūsų programa: ' + pavadinimas1 + ' bus įjungta ' + laikas1 + '.'
@@ -83,22 +84,32 @@ def testing_print(pavadinimas1, laikas1):
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('pavadinimas', help = 'Irasykite programos pavadinima')
+    parser.add_argument('pavadinimas', nargs='?', help = 'Irasykite programos pavadinima')
     """Patalpina įrašytą pavadinimą į argument."""
 
-    parser.add_argument('laikas', help = 'Irasykite programos paleidimo laiką', type = str)
+    parser.add_argument('laikas', nargs='?', help = 'Irasykite programos paleidimo laiką', type = str)
     """Patalpina įrašytą laiką į argument."""
 
     args = parser.parse_args()
     pavadinimas = args.pavadinimas
     laikas = args.laikas
 
-    finding_program_class = FindingProgram(scheduler = schedule, laikas = laikas, pavadinimas = pavadinimas)
-    printing_program_path = PrintPath(pavadinimas = pavadinimas)
-    """Pavadinimo ir laiko argumentai patalpinami į kintamuosius."""
-    printing_program_path.print_path()
-    finding_program_class.run_program()
-    finding_program_class.ivestu_duomenu_print()
+    pavadinimas_type = type(pavadinimas)
+    if laikas is None:
+        printing_program_path = PrintPath(pavadinimas = pavadinimas)
+        printing_program_path.print_path()
+    elif pavadinimas is None:
+        return 'Įveskite programos pavadinimą.'
+    elif pavadinimas == '' and laikas == '':
+        return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
+    elif pavadinimas_type == int:
+        return 'Įveskite programos pavadinimą ir jos įjungimo laiką.'
+    else:
+        finding_program_class = FindingProgram(scheduler = schedule, laikas = laikas, pavadinimas = pavadinimas)
+        """Pavadinimo ir laiko argumentai patalpinami į kintamuosius."""
+        finding_program_class.run_program()
+        finding_program_class.ivestu_duomenu_print()
+
     while True:
             schedule.run_pending()
             time.sleep(10)
