@@ -8,7 +8,7 @@
 
 * Ši sekcija bus papildyta.
 # How to use it
-* Įsijungus scriptąeditoriuje, įsijunkite terminalą.
+* Įsijungus scriptą editoriuje, įsijunkite terminalą.
 * Terminale įrašykite norimos programos pavadinimą kabutėse. Pvz. "Google Chrome.lnk"
 * Paspauskite tarpą ir įrašykite norimos programos įjungimo laiką tokiu formatu: 00:00. Jeigu programos laikas nebus įrašytas į terminalą bus išvestas jūsų norimos programos full path.
 
